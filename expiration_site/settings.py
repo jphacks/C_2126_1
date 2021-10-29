@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,11 +23,16 @@ env.read_env('.env')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-SECRET_KEY = env.get_value('SECRET_KEY', str)
+DEBUG = False
 
-DEBUG = env.bool('DEBUG', default=False)
+if not DEBUG:
+    SECRET_KEY = os.environ['SECRET_KEY']
+    import django_heroku
+    django_heroku.settings(locals())
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+
+
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -51,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', 
 ]
 
 ROOT_URLCONF = 'expiration_site.urls'
@@ -79,8 +86,12 @@ WSGI_APPLICATION = 'expiration_site.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'name',
+        'USER': 'user',
+        'PASSWORD': '',
+        'HOST': 'host',
+        'PORT': '',
     }
 }
 

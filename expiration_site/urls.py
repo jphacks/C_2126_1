@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('frontend.urls')),
     path('api/', include('api.urls')),
+    path('line_bot_ai/', include('line_bot_ai.urls'))
 ]
